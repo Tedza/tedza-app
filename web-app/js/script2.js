@@ -1,9 +1,7 @@
-var tedza = null;
-
-(function (tedza){
+$(function() {
 	var breadcrumb = $("#breadcrumb");
-	
-	function loadData(callback){
+
+	function loadData(callback) {
 		$.ajax({
 			url:"home/applicationData",
 			dataType: "json",
@@ -14,17 +12,15 @@ var tedza = null;
 			}
 		});
 	}
-	
-	function drawButton( image, label, callback ) {
-		var a = $("<a href='javascript:void(0)' />").click(callback);
-		var li = $("<li />")
-			.append(
-				a.append(
-					$("<img src='"+ image + "' />"),
-					$("<span>"+label+ "</span>")
-				)
-			);
 
+	function drawButton(image, label, callback) {
+		var a = $("<a href='javascript:void(0);' />").unbind("click").bind("click", callback);
+		a.click(function() { _gaq.push(['_trackEvent', 'botão', 'clicou', label]); });
+		a.mouseover(function() { _gaq.push(['_trackEvent', 'botão', 'mouse_over', label]); });
+
+		var li = $("<li />").append(
+			a.append($("<img src='"+ image + "' />"), $("<span></span>").html(label))
+		);
 		return li;
 	}
 
@@ -36,7 +32,7 @@ var tedza = null;
 				 drawButton(
 				 	data.img,
 				 	data.label,
-				 	function () {
+				 	function() {
 				 		userProfile.geekLabel = data.label;
 						userProfile.geekType = i;
 						userProfile.geekTags = data.tags.toString();
@@ -51,14 +47,13 @@ var tedza = null;
 	}
 	
 	function buildGeekBreadCrumb() {
-		breadcrumb.fadeOut("fast", function () {
+		breadcrumb.fadeOut("fast", function() {
 			breadcrumb.html("");
 			breadcrumb.fadeIn("slow");
 		});
 	}
 
-	function onInitializeGeekStep () {
-		console.log("onInitializeGeekStep");
+	function onInitializeGeekStep() {
 		var html = buildGeekChooserPanel();
 		$("#q1").empty().append(html);
 		buildGeekBreadCrumb();
@@ -71,7 +66,7 @@ var tedza = null;
 			ul.append(
 				drawButton( "images/icon_" + minute + "min.png",
 					minute + " Minutos",
-					function () {
+					function() {
 						userProfile.spendingTime = minute;
 						navigation.showNextStep();
 					})
@@ -84,14 +79,13 @@ var tedza = null;
 	}
 	
 	function buildSpendingTimeBreadCrumb() {
-		breadcrumb.fadeOut("fast", function () {
+		breadcrumb.fadeOut("fast", function() {
 			breadcrumb.html("IDEAS for <a href=\"javascript:void(0)\">" + userProfile.geekLabel + " GEEK</a>");
 			breadcrumb.fadeIn("slow");
 		});
 	}
 
-	function onInitializeSpendingTimeStep () {
-		console.log("onInitializeSpendingTimeStep");
+	function onInitializeSpendingTimeStep() {
 		var html = buildSpendingTimeStep();
 		$("#q2").empty().append(html);
 		buildSpendingTimeBreadCrumb();
@@ -101,12 +95,12 @@ var tedza = null;
 		var ul = $("<ul class='buttons themes' />");
 		var themeList = loadedData.data[userProfile.geekType].themes;
 
-		$(themeList).each(function(i, theme){
+		$(themeList).each(function(i, theme) {
 			ul.append(
 				drawButton(
 				 	theme.imageUrl,
 				 	theme.name,
-				 	function (){
+				 	function() {
 						userProfile.themeId = theme.id;
 						userProfile.themeName = theme.name;
 						navigation.showNextStep();
@@ -122,14 +116,13 @@ var tedza = null;
 	
 	function buildThemeBreadCrumb() {
 		var html = breadcrumb.html()  + " in <a href=\"javascript:void(0)\">" + userProfile.spendingTime + " MINUTES</a>";
-		breadcrumb.fadeOut("fast", function () {
+		breadcrumb.fadeOut("fast", function() {
 			breadcrumb.html(html);
 			breadcrumb.fadeIn("slow");
 		});
 	}
 
-	function onInitializeThemeStep () {
-		console.log("onInitializeThemeStep");
+	function onInitializeThemeStep() {
 		var html = buildThemeChooserPanel();
 		$("#q3").empty().append(html);
 		buildThemeBreadCrumb();
@@ -137,13 +130,13 @@ var tedza = null;
 	
 	function buildVideoBreadCrumb() {
 		var html = breadcrumb.html()  + " inside <a href=\"javascript:void(0)\">" + userProfile.themeName + "</a>";
-		breadcrumb.fadeOut("fast", function () {
+		breadcrumb.fadeOut("fast", function() {
 			breadcrumb.html(html);
 			breadcrumb.fadeIn("slow");
 		});
 	}
 
-	function onInitializeVideoPlayerStep () {
+	function onInitializeVideoPlayerStep() {
 		buildVideoBreadCrumb();
 		$.ajax({
 			url:"video/getResults",
@@ -165,7 +158,7 @@ var tedza = null;
 	}
 
 	function initialize() {
-		loadData(function (){
+		loadData(function() {
 			navigation = new Navigation({
 				objects: ["q1","q2","q3","videoplayer"],
 				listener: function (id) {
@@ -173,7 +166,6 @@ var tedza = null;
 				}
 			});
 			
-			console.log("Initialized");
 		});
 	}
 
@@ -181,12 +173,11 @@ var tedza = null;
 		player = null,
 		userProfile = {},
 		steps = {
-				q1: onInitializeGeekStep,
-				q2: onInitializeSpendingTimeStep,
-				q3: onInitializeThemeStep,
-				videoplayer: onInitializeVideoPlayerStep
+			q1: onInitializeGeekStep,
+			q2: onInitializeSpendingTimeStep,
+			q3: onInitializeThemeStep,
+			videoplayer: onInitializeVideoPlayerStep
 		};
 
 	$(initialize);
-
-})(tedza);
+});

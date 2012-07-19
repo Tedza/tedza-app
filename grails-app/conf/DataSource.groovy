@@ -13,7 +13,7 @@ environments
 	{
 		dataSource
 		{
-			dbCreate = "create-drop" // create-drop, update
+			dbCreate = "update" // create-drop, update
 			driverClassName = "org.postgresql.Driver"
 			dialect = org.hibernate.dialect.PostgreSQLDialect
 			url = "jdbc:postgresql://localhost:5432/tedza"

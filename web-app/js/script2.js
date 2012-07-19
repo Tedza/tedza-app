@@ -15,8 +15,8 @@ $(function() {
 
 	function drawButton(image, label, callback) {
 		var a = $("<a href='javascript:void(0);' />").unbind("click").bind("click", callback);
-		a.click(function() { _gaq.push(['_trackEvent', 'botão', 'clicou', label]); });
-		a.mouseover(function() { _gaq.push(['_trackEvent', 'botão', 'mouse_over', label]); });
+		a.click(function() { _gaq.push(['_trackEvent', 'botao', 'clicou', label]); });
+		a.mouseover(function() { _gaq.push(['_trackEvent', 'botao', 'mouse_over', label]); });
 
 		var li = $("<li />").append(
 			a.append($("<img src='"+ image + "' />"), $("<span></span>").html(label))

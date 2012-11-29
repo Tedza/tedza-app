@@ -3,4 +3,4 @@ Tedza
 
 The best TED video selector.
 
-Se our beta version: http://tedza.com/
+See our beta version at http://tedza.com/
